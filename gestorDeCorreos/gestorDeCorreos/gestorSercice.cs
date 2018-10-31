@@ -18,18 +18,35 @@ namespace gestorDeCorreos
         private static extern bool SetServiceStatus(System.IntPtr handle, ref ServiceStatus serviceStatus);
         private int eventRegistroId = 1;
 
-        public gestorSercice()
+        public gestorSercice(string[] args)
         {
             InitializeComponent();
 
-            eventLogRegistro = new System.Diagnostics.EventLog();
-            if (!System.Diagnostics.EventLog.SourceExists("SourceCorreo"))
+            // Este código establece el origen del evento y el nombre del registro de acuerdo con los parámetros de inicio proporcionados,
+            // o utiliza valores predeterminados si no se proporcionan argumentos.
+            string eventSourceName = "SourceCorreos";
+            string logName = "LogCorreos";
+
+            if (args.Length > 0)
             {
-                System.Diagnostics.EventLog.CreateEventSource(
-                    "SourceCorreo", "LogCorreo");
+                eventSourceName = args[0];
             }
-            eventLogRegistro.Source = "SourceCorreo";
-            eventLogRegistro.Log = "LogCorreo";
+
+            if (args.Length > 1)
+            {
+                logName = args[1];
+            }
+
+            eventLogRegistro = new System.Diagnostics.EventLog();
+
+            if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
+            {
+                System.Diagnostics.EventLog.CreateEventSource(eventSourceName, logName);
+            }
+
+            eventLogRegistro.Source = eventSourceName;
+            eventLogRegistro.Log = logName;
+
         }
 
         protected override void OnStart(string[] args)
