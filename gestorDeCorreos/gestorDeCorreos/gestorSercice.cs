@@ -8,6 +8,7 @@ using System.Runtime.InteropServices; //Clase para estados del servicio
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace gestorDeCorreos
 {
@@ -16,7 +17,15 @@ namespace gestorDeCorreos
         //Funcion para el estado del servicio
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(System.IntPtr handle, ref ServiceStatus serviceStatus);
+       
+        //Variables
         private int eventRegistroId = 1;
+
+        // Parametros de app.config
+        private int tiempo = Int32.Parse(ConfigurationManager.AppSettings["timer"]);
+        string vsBd = ConfigurationManager.AppSettings["bd"];
+        string vsUsuario = ConfigurationManager.AppSettings["bdUser"];
+        string vsContrasenna = ConfigurationManager.AppSettings["bdPass"];
 
         public gestorSercice(string[] args)
         {
@@ -51,11 +60,11 @@ namespace gestorDeCorreos
 
         protected override void OnStart(string[] args)
         {   
-            eventLogRegistro.WriteEntry("Dentro de onStart");
+            eventLogRegistro.WriteEntry("Dentro de onStart, tiempo de espera: " +tiempo);
 
             //Se encarga de llamar al timer con el intervalo ingresado por parametro
             System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = 60000; // 60 seconds
+            timer.Interval = tiempo; // cantidad desde app.config
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
 
@@ -79,6 +88,11 @@ namespace gestorDeCorreos
         protected override void OnStop()
         {
             eventLogRegistro.WriteEntry("El servicio se detuvo");
+        }
+
+        public string coneccion()
+        {
+            return "Data Source=" + vsBd + ";User Id=" + vsUsuario + ";Password=" + vsContrasenna + ";";
         }
 
         //Estado del servicio

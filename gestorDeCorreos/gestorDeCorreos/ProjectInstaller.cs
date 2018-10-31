@@ -18,7 +18,7 @@ namespace gestorDeCorreos
 
         protected override void OnBeforeInstall(IDictionary savedState)
         {
-            string parameter = "SourceGestprCorreos\" \"EventLogGestorCorreos";
+            string parameter = "SourceGestorCorreos\" \"EventLogGestorCorreos";
             Context.Parameters["assemblypath"] = "\"" + Context.Parameters["assemblypath"] + "\" \"" + parameter + "\"";
             base.OnBeforeInstall(savedState);
         }
