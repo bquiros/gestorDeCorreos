@@ -1,6 +1,6 @@
 ﻿namespace gestorDeCorreos
 {
-    partial class Service1
+    partial class gestorSercice
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,10 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.eventLogRegistro = new System.Diagnostics.EventLog();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLogRegistro)).BeginInit();
+            // 
+            // gestorSercice
+            // 
             this.ServiceName = "Service1";
+            ((System.ComponentModel.ISupportInitialize)(this.eventLogRegistro)).EndInit();
+
         }
 
         #endregion
+
+        private System.Diagnostics.EventLog eventLogRegistro;
     }
 }
