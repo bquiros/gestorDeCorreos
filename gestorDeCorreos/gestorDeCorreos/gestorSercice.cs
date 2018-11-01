@@ -23,9 +23,6 @@ namespace gestorDeCorreos
 
         // Parametros de app.config
         private int tiempo = Int32.Parse(ConfigurationManager.AppSettings["timer"]);
-        string vsBd = ConfigurationManager.AppSettings["bd"];
-        string vsUsuario = ConfigurationManager.AppSettings["bdUser"];
-        string vsContrasenna = ConfigurationManager.AppSettings["bdPass"];
 
         public gestorSercice(string[] args)
         {
