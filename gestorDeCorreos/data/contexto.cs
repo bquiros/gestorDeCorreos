@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Oracle.DataAccess.Client;
 using System.Configuration;
 
-namespace data
+namespace dataCorreos
 {
     class contexto
     {

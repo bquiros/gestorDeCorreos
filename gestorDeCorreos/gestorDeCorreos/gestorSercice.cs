@@ -87,11 +87,6 @@ namespace gestorDeCorreos
             eventLogRegistro.WriteEntry("El servicio se detuvo");
         }
 
-        public string coneccion()
-        {
-            return "Data Source=" + vsBd + ";User Id=" + vsUsuario + ";Password=" + vsContrasenna + ";";
-        }
-
         //Estado del servicio
         public enum ServiceState
         {

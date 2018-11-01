@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Oracle.DataAccess.Client;
 using System.Data;
 
-namespace data
+namespace dataCorreos
 {
-    class gestion
+    public class gestion
     {
         public DataTable getDatosTabla()
         {
