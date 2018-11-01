@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dataCorreos", "data\dataCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "logica", "logica\logica.csproj", "{A9927345-B7AD-4D61-8265-9DF163BC6DAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ztest", "ztest\ztest.csproj", "{42CFED19-D589-423D-A76F-5851D9611EC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A9927345-B7AD-4D61-8265-9DF163BC6DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9927345-B7AD-4D61-8265-9DF163BC6DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9927345-B7AD-4D61-8265-9DF163BC6DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42CFED19-D589-423D-A76F-5851D9611EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42CFED19-D589-423D-A76F-5851D9611EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42CFED19-D589-423D-A76F-5851D9611EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42CFED19-D589-423D-A76F-5851D9611EC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,26 +17,24 @@ namespace dataCorreos
             string vsUsuario = ConfigurationManager.AppSettings["bdUser"];
             string vsContrasenna = ConfigurationManager.AppSettings["bdPass"];
 
-            return "Data Source=" + vsBd + ";User Id=" + vsUsuario + ";Password=" + vsContrasenna + ";"; ;
+            return "Data Source=" + vsBd + ";User Id=" + vsUsuario + ";Password=" + vsContrasenna + ";";
         }// fin getCredenciales
 
-        public bool getConeccion()
+        public string getConeccion()
         {
-            bool vbConectar = false;
-
+            
             OracleConnection conn = new OracleConnection();
             conn.ConnectionString = getCredenciales();
 
             try
             {
                 conn.Open();
-                vbConectar = true;
-
-                return vbConectar;
+                conn.Close();
+                return getCredenciales();
             }
             catch (Exception)
             {
-                return vbConectar;
+                throw;
             }
         }// Fin de getConection
 

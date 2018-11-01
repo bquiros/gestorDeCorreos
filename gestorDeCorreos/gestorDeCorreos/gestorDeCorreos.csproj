@@ -80,6 +80,10 @@
       <Project>{cb6ebd24-43da-462d-b238-24a0b5cdbe6d}</Project>
       <Name>dataCorreos</Name>
     </ProjectReference>
+    <ProjectReference Include="..\logica\logica.csproj">
+      <Project>{a9927345-b7ad-4d61-8265-9df163bc6daa}</Project>
+      <Name>logica</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

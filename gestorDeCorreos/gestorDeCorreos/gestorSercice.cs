@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using dataCorreos;
+using logica;
 
 namespace gestorDeCorreos
 {
@@ -20,7 +21,7 @@ namespace gestorDeCorreos
         private static extern bool SetServiceStatus(System.IntPtr handle, ref ServiceStatus serviceStatus);
        
         //Variables
-        private int eventRegistroId = 1;
+        int eventRegistroId = 1;
 
         // Parametros de app.config
         private int tiempo = Int32.Parse(ConfigurationManager.AppSettings["timer"]);
@@ -32,7 +33,7 @@ namespace gestorDeCorreos
             // Este código establece el origen del evento y el nombre del registro de acuerdo con los parámetros de inicio proporcionados,
             // o utiliza valores predeterminados si no se proporcionan argumentos.
             string eventSourceName = "SourceCorreos";
-            string logName = "LogCorreos";
+            string logName = "LogGestorCorreos";
 
             if (args.Length > 0)
             {
@@ -59,15 +60,16 @@ namespace gestorDeCorreos
         protected override void OnStart(string[] args)
         {   
             contexto cn = new contexto();
-            bool servidor = cn.getConeccion();
+            string servidor = cn.getConeccion();
 
-            if (servidor)
-            {
-                eventLogRegistro.WriteEntry("Dentro de onStart, tiempo de espera para envio de correos: " + tiempo + "milisegundos");
-                eventLogRegistro.WriteEntry("Conectado a: " + cn.getCredenciales());
+            try{
+                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
+                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales());
             }
-            else{
-                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + cn.getCredenciales());
+            catch (Exception e)
+            {
+                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message);
+                OnStop();
             }
            
             //Se encarga de llamar al timer con el intervalo ingresado por parametro
@@ -89,12 +91,30 @@ namespace gestorDeCorreos
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
         {
-            // Actividades monitoreadas
-            eventLogRegistro.WriteEntry("Monitoreado", EventLogEntryType.Information, eventRegistroId++);
+            string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+            string hora = DateTime.Now.ToString("hh:mm:ss");
+
+            try
+            {
+                // Actividades monitoreadas
+                logicaCorreo lg = new logicaCorreo();
+                lg.getDatosTabla();
+                eventLogRegistro.WriteEntry("Envio de correos programado: día: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
+            }
+            catch(Exception e)
+            {
+                eventLogRegistro.WriteEntry("Error al revisar la tabla: " + e.Message);
+                OnStop();
+            }
         }
 
         protected override void OnStop()
-        {
+        {     
+            // Detener el servicio.
+            ServiceStatus serviceStatus = new ServiceStatus();
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
+            serviceStatus.dwWaitHint = 100000;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
             eventLogRegistro.WriteEntry("El servicio se detuvo");
         }
 

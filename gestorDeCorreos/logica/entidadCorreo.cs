@@ -24,7 +24,7 @@ namespace logica
         public string Notificacion { get; set; }
         public string Contrato { get; set; }
 
-        //Constructor de objeto*/
+        //Constructor de objeto
         public entidadCorreo(string pAnno, string pConsecutivo, DateTime pFechaIngreso, string pRemitente, string pDestinatario, string pCc, string pMensaje, string pAsunto, string pEstado, string pFechaGestion, string pGestor, string pRutaAdjunto, string pError, string pNotificacion, string pContrato)
         {
             this.Anno = pAnno;
@@ -42,6 +42,6 @@ namespace logica
             this.Error = pError;
             this.Notificacion = pNotificacion;
             this.Contrato = pContrato;
-        }//(Fin del constructor para entidadCorreo
+        }//Fin del constructor para entidadCorreo
     }// Fin entidadCorreo
 }
