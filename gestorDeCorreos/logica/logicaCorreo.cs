@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using Oracle.DataAccess;
 using dataCorreos;
+using System.Configuration;
 
 
 namespace logica
@@ -37,6 +38,7 @@ namespace logica
 
         private void enviarCorreo(entidadCorreo pOb) /*parametro viene de la funcion "getDatosTabla"*/
         {
+            string contrasenna = ConfigurationManager.AppSettings["Parque1818"];
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
 
             msg.To.Add(pOb.Destinatario);

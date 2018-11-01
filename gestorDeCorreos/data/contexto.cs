@@ -8,7 +8,7 @@ using System.Configuration;
 
 namespace dataCorreos
 {
-    class contexto
+    public class contexto
     {
         
         public string getCredenciales()

@@ -9,6 +9,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using dataCorreos;
 
 namespace gestorDeCorreos
 {
@@ -57,8 +58,18 @@ namespace gestorDeCorreos
 
         protected override void OnStart(string[] args)
         {   
-            eventLogRegistro.WriteEntry("Dentro de onStart, tiempo de espera: " +tiempo);
+            contexto cn = new contexto();
+            bool servidor = cn.getConeccion();
 
+            if (servidor)
+            {
+                eventLogRegistro.WriteEntry("Dentro de onStart, tiempo de espera para envio de correos: " + tiempo + "milisegundos");
+                eventLogRegistro.WriteEntry("Conectado a: " + cn.getCredenciales());
+            }
+            else{
+                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + cn.getCredenciales());
+            }
+           
             //Se encarga de llamar al timer con el intervalo ingresado por parametro
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = tiempo; // cantidad desde app.config
