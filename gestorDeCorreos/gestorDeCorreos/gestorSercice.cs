@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices; //Clase para estados del servicio
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using System.Configuration;
 using dataCorreos;
 using logica;
-using System.IO;
 
 namespace gestorDeCorreos
 {
@@ -81,8 +74,9 @@ namespace gestorDeCorreos
                 contexto cn = new contexto();
                 string servidor = cn.getConeccion();
 
-                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
                 eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales());
+                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
+
             }
             catch (Exception e)
             {
@@ -94,6 +88,7 @@ namespace gestorDeCorreos
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
         {
+            //Fecha y hora del sistema
             string fecha = DateTime.Now.ToString("dd/MM/yyyy");
             string hora = DateTime.Now.ToString("hh:mm:ss");
 
@@ -102,23 +97,35 @@ namespace gestorDeCorreos
                 // Actividades monitoreadas
                 logicaCorreo lg = new logicaCorreo();
                 lg.getDatosTabla();
-                eventLogRegistro.WriteEntry("Envio de correos programado: día: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
+                try
+                {
+                    eventLogRegistro.WriteEntry("Envio de correos realizado Fecha: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
+                }
+                catch(Exception e)
+                {
+                    eventLogRegistro.WriteEntry("Error al enviar correos: " +e.Message, EventLogEntryType.Information, eventRegistroId++);
+                }
+                
             }
             catch(Exception e)
             {
-                eventLogRegistro.WriteEntry("Error al revisar la tabla: " + e.Message);
+                eventLogRegistro.WriteEntry("Error al conectar con la base de datos: " + e.Message);
                 OnStop();
             }
         }
 
         protected override void OnStop()
-        {     
+        {
+            //Fecha y hora del sistema
+            string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+            string hora = DateTime.Now.ToString("hh:mm:ss");
+
             // Detener el servicio.
             ServiceStatus serviceStatus = new ServiceStatus();
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-            eventLogRegistro.WriteEntry("El servicio se detuvo");
+            eventLogRegistro.WriteEntry("El servicio se detuvo. Fecha: " + fecha + " ,hora: " + hora);
         }
 
         //Estado del servicio

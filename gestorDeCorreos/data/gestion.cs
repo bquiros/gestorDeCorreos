@@ -1,9 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using Oracle.DataAccess.Client;
 using System.Data;
 using System.Configuration;
@@ -23,7 +18,6 @@ namespace dataCorreos
             
             try
             {
-                //qry = "SELECT * from GC_CORREOS GC WHERE GC.ESTADO = 'P'";
                 qry = "SELECT * from " + tbNombre + " " + tbAlias + " WHERE " + tbAlias + ".ESTADO = 'P'";
                 OracleDataAdapter dtsOra = new OracleDataAdapter(qry, ct.getConeccion());
                 dtsOra.Fill(dt);
@@ -48,7 +42,6 @@ namespace dataCorreos
                 conn.Open();
                 OracleCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.Text;
-                //cmd.CommandText = "update gc_correos gc set gc.estado = 'E', gc.fecha_gestion = to_date(Sysdate) where gc.ano = " + pAnno + " and gc.consecutivo = " + pConsecutivo + "";
                 cmd.CommandText = "update " + tbNombre + " " + tbAlias + " set " + tbAlias + ".estado = 'E', " + tbAlias + ".fecha_gestion = to_date(Sysdate) where " + tbAlias + ".ano = " + pAnno + " and " + tbAlias + ".consecutivo = " + pConsecutivo + "";
                 cmd.ExecuteNonQuery();
                 conn.Close();
