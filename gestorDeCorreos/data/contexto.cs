@@ -13,11 +13,15 @@ namespace dataCorreos
         
         public string getCredenciales()
         {
-            string vsBd = ConfigurationManager.AppSettings["bd"];
-            string vsUsuario = ConfigurationManager.AppSettings["bdUser"];
-            string vsContrasenna = ConfigurationManager.AppSettings["bdPass"];
+            //string vsBd = ConfigurationManager.AppSettings["bd"];
+            //string vsUsuario = ConfigurationManager.AppSettings["bdUser"];
+            //string vsContrasenna = ConfigurationManager.AppSettings["bdPass"];
 
-            return "Data Source=" + vsBd + ";User Id=" + vsUsuario + ";Password=" + vsContrasenna + ";";
+            //return "Data Source=" + vsBd + ";User Id=" + vsUsuario + ";Password=" + vsContrasenna + ";";
+
+            string dataSource = System.Configuration.ConfigurationManager.AppSettings["connectionString"].ToString();
+            return dataSource;
+
         }// fin getCredenciales
 
         public string getConeccion()

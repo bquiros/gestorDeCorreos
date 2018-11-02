@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using Oracle.DataAccess;
-using dataCorreos;
+using dataCorreos; 
 using System.Configuration;
 
 
@@ -70,7 +70,7 @@ namespace logica
 
             try
             {
-                //cliente.Send(msg);
+                cliente.Send(msg);
 
                 //Referencio clase consulta
                 gestion gn = new gestion();

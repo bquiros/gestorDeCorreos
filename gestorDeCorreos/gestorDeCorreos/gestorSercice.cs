@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using dataCorreos;
 using logica;
+using System.IO;
 
 namespace gestorDeCorreos
 {
@@ -58,20 +59,7 @@ namespace gestorDeCorreos
         }
 
         protected override void OnStart(string[] args)
-        {   
-            contexto cn = new contexto();
-            string servidor = cn.getConeccion();
-
-            try{
-                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
-                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales());
-            }
-            catch (Exception e)
-            {
-                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message);
-                OnStop();
-            }
-           
+        {      
             //Se encarga de llamar al timer con el intervalo ingresado por parametro
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = tiempo; // cantidad desde app.config
@@ -82,11 +70,26 @@ namespace gestorDeCorreos
             ServiceStatus serviceStatus = new ServiceStatus();
             serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
             serviceStatus.dwWaitHint = 100000;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);                                  
 
             // Actualizar el estado del servicio en ejecución.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+
+            try
+            {
+                contexto cn = new contexto();
+                string servidor = cn.getConeccion();
+
+                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
+                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales());
+            }
+            catch (Exception e)
+            {
+                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message);
+                OnStop();
+            }
+
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
