@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using dataCorreos; 
+using dataCorreos;
 using System.Configuration;
+using System.Net.Mail;
 
 namespace logica
 {
@@ -45,9 +46,7 @@ namespace logica
 
             //Se crea string que contiene el cuerpo del correo
             StringBuilder contenido = new StringBuilder();
-            contenido.AppendLine("Fecha: " + pOb.FechaIngreso);
-            contenido.AppendLine(pOb.Mensaje);
-            contenido.AppendLine(pOb.RutaAdjunto);
+            contenido.AppendLine("Mensaje: " + pOb.Mensaje);
             contenido.AppendLine("Gestor: " + pOb.Gestor);
 
             //Se envia el string creado como cuerpo del correo
@@ -55,9 +54,11 @@ namespace logica
             msg.BodyEncoding = System.Text.Encoding.UTF8;
             msg.IsBodyHtml = true;
             msg.From = new System.Net.Mail.MailAddress(pOb.Remitente);
+            msg.Attachments.Add(new Attachment(@pOb.RutaAdjunto));
 
             System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
             cliente.Credentials = new System.Net.NetworkCredential(pOb.Remitente, contrasenna); //credenciales de la cuenta que enviara los correos
+
 
             cliente.Port = 587;
             cliente.EnableSsl = true;
