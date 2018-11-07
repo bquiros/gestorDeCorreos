@@ -52,38 +52,37 @@ namespace gestorDeCorreos
         }
 
         protected override void OnStart(string[] args)
-        {      
+        {
+            // Actualizar estado del inicio pendiente.
+            ServiceStatus serviceStatus = new ServiceStatus();
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
+            serviceStatus.dwWaitHint = 100000;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+
             //Se encarga de llamar al timer con el intervalo ingresado por parametro
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = tiempo; // cantidad desde app.config
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
 
-            // Actualiar estado del inicio pendiente.
-            ServiceStatus serviceStatus = new ServiceStatus();
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
-            serviceStatus.dwWaitHint = 100000;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);                                  
-
-            // Actualizar el estado del servicio en ejecución.
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-
             try
             {
                 contexto cn = new contexto();
                 string servidor = cn.getConeccion();
 
-                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales());
-                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
+                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales(), EventLogEntryType.Information, eventRegistroId++);
+                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos", EventLogEntryType.Information, eventRegistroId++);
 
             }
             catch (Exception e)
             {
-                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message);
+                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message, EventLogEntryType.Information, eventRegistroId++);
                 OnStop();
             }
 
+            // Actualiza el estado en ejecución
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
@@ -96,20 +95,12 @@ namespace gestorDeCorreos
             {
                 // Actividades monitoreadas
                 logicaCorreo lg = new logicaCorreo();
-                lg.getDatosTabla();
-                try
-                {
-                    eventLogRegistro.WriteEntry("Envio de correos realizado Fecha: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
-                }
-                catch(Exception e)
-                {
-                    eventLogRegistro.WriteEntry("Error al enviar correos: " +e.Message, EventLogEntryType.Information, eventRegistroId++);
-                }
-                
+                string correos = lg.DatosTabla();
+                eventLogRegistro.WriteEntry(correos +" :fecha: " + fecha + ", hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                eventLogRegistro.WriteEntry("Error al conectar con la base de datos: " + e.Message);
+                eventLogRegistro.WriteEntry("Error al enviar correos: " + e.Message, EventLogEntryType.Information, eventRegistroId++);
                 OnStop();
             }
         }

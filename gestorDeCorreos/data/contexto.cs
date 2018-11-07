@@ -25,9 +25,9 @@ namespace dataCorreos
                 conn.Close();
                 return getCredenciales();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return "Error getConection: " + e.Message;
             }
         }// Fin de getConection
     }
