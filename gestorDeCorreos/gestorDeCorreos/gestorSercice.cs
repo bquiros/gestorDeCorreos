@@ -74,13 +74,13 @@ namespace gestorDeCorreos
                 contexto cn = new contexto();
                 string servidor = cn.getConeccion();
 
-                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales());
-                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos");
+                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales(), EventLogEntryType.Information, eventRegistroId++);
+                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos", EventLogEntryType.Information, eventRegistroId++);
 
             }
             catch (Exception e)
             {
-                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message);
+                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message, EventLogEntryType.Information, eventRegistroId++);
                 OnStop();
             }
 
@@ -109,7 +109,7 @@ namespace gestorDeCorreos
             }
             catch(Exception e)
             {
-                eventLogRegistro.WriteEntry("Error al conectar con la base de datos: " + e.Message);
+                eventLogRegistro.WriteEntry("Error al conectar con la base de datos: " + e.Message, EventLogEntryType.Information, eventRegistroId++);
                 OnStop();
             }
         }
@@ -125,7 +125,7 @@ namespace gestorDeCorreos
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-            eventLogRegistro.WriteEntry("El servicio se detuvo. Fecha: " + fecha + " ,hora: " + hora);
+            eventLogRegistro.WriteEntry("El servicio se detuvo. Fecha: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
         }
 
         //Estado del servicio

@@ -45,9 +45,9 @@ namespace logica
 
             //Se crea string que contiene el cuerpo del correo
             StringBuilder contenido = new StringBuilder();
-            contenido.AppendLine("Fecha: " + pOb.FechaIngreso);
-            contenido.AppendLine(pOb.Mensaje);
-            contenido.AppendLine(pOb.RutaAdjunto);
+            //contenido.AppendLine("Fecha: " + pOb.FechaIngreso);
+            contenido.AppendLine(pOb.Mensaje + "<br>");
+            contenido.AppendLine(pOb.RutaAdjunto + "<br>");
             contenido.AppendLine("Gestor: " + pOb.Gestor);
 
             //Se envia el string creado como cuerpo del correo
