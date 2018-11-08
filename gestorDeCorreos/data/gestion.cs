@@ -9,18 +9,24 @@ namespace dataCorreos
     {
         public DataTable getDatosTabla()
         {
-            string tbNombre = ConfigurationManager.AppSettings["tbName"];
-            string tbAlias = ConfigurationManager.AppSettings["tbAlias"];
-
-            DataTable dt = new DataTable();
-            contexto ct = new contexto();
-            string qry = string.Empty;
-            
+              
             try
             {
+                contexto ct = new contexto();
+                OracleConnection conn = new OracleConnection();
+                conn.ConnectionString = ct.getCredenciales();
+                conn.Open();
+
+                DataTable dt = new DataTable();
+                string qry = string.Empty;
+                string tbNombre = ConfigurationManager.AppSettings["tbName"];
+                string tbAlias = ConfigurationManager.AppSettings["tbAlias"];
+
                 qry = "SELECT * from " + tbNombre + " " + tbAlias + " WHERE " + tbAlias + ".ESTADO = 'P'";
-                OracleDataAdapter dtsOra = new OracleDataAdapter(qry, ct.getConeccion());
+                OracleDataAdapter dtsOra = new OracleDataAdapter(qry, conn.ConnectionString);
                 dtsOra.Fill(dt);
+
+                conn.Close();
                 return dt;
             }
             catch (Exception)
@@ -32,15 +38,15 @@ namespace dataCorreos
 
         public string setEstadoFecha(string pAnno, string pConsecutivo)
         {
-            string tbNombre = ConfigurationManager.AppSettings["tbName"];
-            string tbAlias = ConfigurationManager.AppSettings["tbAlias"];
-
             try
             {
                 contexto ct = new contexto();
                 OracleConnection conn = new OracleConnection();
                 conn.ConnectionString = ct.getCredenciales();
                 conn.Open();
+
+                string tbNombre = ConfigurationManager.AppSettings["tbName"];
+                string tbAlias = ConfigurationManager.AppSettings["tbAlias"];
 
                 OracleCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.Text;

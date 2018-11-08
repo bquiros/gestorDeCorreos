@@ -5,6 +5,7 @@ using System.ServiceProcess;
 using System.Configuration;
 using dataCorreos;
 using logica;
+using Oracle.DataAccess.Client;
 
 namespace gestorDeCorreos
 {
@@ -67,12 +68,15 @@ namespace gestorDeCorreos
 
             try
             {
-                contexto cn = new contexto();
-                string servidor = cn.getConeccion();
+                contexto ct = new contexto();
+                OracleConnection conn = new OracleConnection();
+                conn.ConnectionString = ct.getCredenciales();
+                conn.Open();
 
-                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales(), EventLogEntryType.Information, eventRegistroId++);
+                eventLogRegistro.WriteEntry("Conectado correctamente a: " + ct.getCredenciales(), EventLogEntryType.Information, eventRegistroId++);
                 eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos", EventLogEntryType.Information, eventRegistroId++);
 
+                conn.Close();
             }
             catch (Exception e)
             {

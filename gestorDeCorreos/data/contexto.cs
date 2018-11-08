@@ -8,7 +8,8 @@ namespace dataCorreos
         
         public string getCredenciales()
         {
-            string dataSource = System.Configuration.ConfigurationManager.AppSettings["connectionString"].ToString();
+            //string dataSource = System.Configuration.ConfigurationManager.AppSettings["connectionString"].ToString();
+            string dataSource = System.Configuration.ConfigurationManager.ConnectionStrings["connectionString"].ToString();
             return dataSource;
 
         }// fin getCredenciales
