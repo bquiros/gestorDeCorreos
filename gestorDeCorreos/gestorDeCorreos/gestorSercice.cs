@@ -72,15 +72,15 @@ namespace gestorDeCorreos
             try
             {
                 contexto cn = new contexto();
-                string servidor = cn.getConeccion();
+                string servidor = cn.getConexion();
 
-                eventLogRegistro.WriteEntry("Conectado correctamente a: " + cn.getCredenciales(), EventLogEntryType.Information, eventRegistroId++);
-                eventLogRegistro.WriteEntry("Tiempo establecido para la carga de correos: " + tiempo + " milisegundos", EventLogEntryType.Information, eventRegistroId++);
+                eventLogRegistro.WriteEntry("Conectado correctamente a la base de datos.", EventLogEntryType.Information, eventRegistroId++);
+                eventLogRegistro.WriteEntry("Tiempo establecido para envio de correos: " + tiempo + " milisegundos.", EventLogEntryType.Information, eventRegistroId++);
 
             }
             catch (Exception e)
             {
-                eventLogRegistro.WriteEntry("Error al conectar con el servidor: " + e.Message, EventLogEntryType.Information, eventRegistroId++);
+                eventLogRegistro.WriteEntry("Error al conectar con la base de datos " + e.Message, EventLogEntryType.Information, eventRegistroId++);
                 OnStop();
             }
 
@@ -96,10 +96,10 @@ namespace gestorDeCorreos
             {
                 // Actividades monitoreadas
                 logicaCorreo lg = new logicaCorreo();
-                lg.getDatosTabla();
+                string respuesta = lg.DatosTabla();
                 try
                 {
-                    eventLogRegistro.WriteEntry("Envio de correos realizado Fecha: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
+                    eventLogRegistro.WriteEntry(respuesta + " la fecha: " + fecha + " ,hora: " + hora, EventLogEntryType.Information, eventRegistroId++);
                 }
                 catch(Exception e)
                 {

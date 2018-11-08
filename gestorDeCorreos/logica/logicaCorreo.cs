@@ -9,7 +9,7 @@ namespace logica
 {
     public class logicaCorreo
     {
-        public void getDatosTabla()
+        public string DatosTabla()
         {
             List<entidadCorreo> lstCorreo = new List<entidadCorreo>();
 
@@ -23,16 +23,18 @@ namespace logica
                 {
                     enOb = new entidadCorreo(dr[0].ToString(), dr[1].ToString(), Convert.ToDateTime(dr[2]), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), dr[6].ToString(), dr[7].ToString(), dr[8].ToString(), dr[9].ToString(), dr[10].ToString(), dr[11].ToString(), dr[12].ToString(), dr[13].ToString(), dr[14].ToString());
 
-                    enviarCorreo(enOb); //Se envian los campos de la tabla en un objeto
+                    return enviarCorreo(enOb); //Se envian los campos de la tabla en un objeto
+
                 }
+                return "Todos los correos han sido enviados";
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return "Error en arhivo logicaCorreo metodo DatosTabla: " + e.Message;
             }
         }//Fin getDatosTabla
 
-        private void enviarCorreo(entidadCorreo pOb) //parametro viene de la funcion getDatosTabla
+        private string enviarCorreo(entidadCorreo pOb) //parametro viene de la funcion getDatosTabla
         {   
             // Contraseña adquirida desde el archivo app.config
             string contrasenna = ConfigurationManager.AppSettings["mailPass"];
@@ -70,7 +72,7 @@ namespace logica
 
                 //Referencio clase consulta
                 gestion gn = new gestion();
-                gn.setEstadoFecha(pOb.Anno, pOb.Consecutivo);
+                return gn.setEstadoFecha(pOb.Anno, pOb.Consecutivo);
             }
             catch (Exception)
             {

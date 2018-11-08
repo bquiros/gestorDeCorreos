@@ -13,7 +13,7 @@ namespace dataCorreos
 
         }// fin getCredenciales
 
-        public string getConeccion()
+        public string getConexion()
         {
             
             OracleConnection conn = new OracleConnection();
