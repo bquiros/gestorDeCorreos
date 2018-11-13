@@ -4,6 +4,7 @@ using System.Text;
 using System.Data;
 using dataCorreos; 
 using System.Configuration;
+using System.Net.Mail;
 
 namespace logica
 {
@@ -35,31 +36,34 @@ namespace logica
         }//Fin getDatosTabla
 
         private string enviarCorreo(entidadCorreo pOb) //parametro viene de la funcion getDatosTabla
-        {   
+        {
             // Contraseña adquirida desde el archivo app.config
+            string correo = ConfigurationManager.AppSettings["mail"];
             string contrasenna = ConfigurationManager.AppSettings["mailPass"];
+
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
-
+            msg.From = new System.Net.Mail.MailAddress(correo);
             msg.To.Add(pOb.Destinatario);
-            msg.Subject = pOb.Asunto;
+            msg.CC.Add(correo);
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
-            msg.Bcc.Add(pOb.Cc);
 
+            msg.Bcc.Add(correo);
+            msg.Subject = pOb.Asunto;
             //Se crea string que contiene el cuerpo del correo
             StringBuilder contenido = new StringBuilder();
             //contenido.AppendLine("Fecha: " + pOb.FechaIngreso);
             contenido.AppendLine(pOb.Mensaje + "<br>");
             contenido.AppendLine(pOb.RutaAdjunto + "<br>");
-            contenido.AppendLine("Gestor: " + pOb.Gestor);
+            contenido.AppendLine("Gestor: " + pOb.Gestor);  
 
             //Se envia el string creado como cuerpo del correo
             msg.Body = contenido.ToString();
             msg.BodyEncoding = System.Text.Encoding.UTF8;
             msg.IsBodyHtml = true;
-            msg.From = new System.Net.Mail.MailAddress(pOb.Remitente);
+            msg.From = new System.Net.Mail.MailAddress(correo);
 
             System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
-            cliente.Credentials = new System.Net.NetworkCredential(pOb.Remitente, contrasenna); //credenciales de la cuenta que enviara los correos
+            cliente.Credentials = new System.Net.NetworkCredential(correo, contrasenna); //credenciales de la cuenta que enviara los correos
 
             cliente.Port = 587;
             cliente.EnableSsl = true;
