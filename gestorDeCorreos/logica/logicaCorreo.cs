@@ -43,17 +43,21 @@ namespace logica
 
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
             msg.From = new System.Net.Mail.MailAddress(correo);
-            msg.To.Add(pOb.Destinatario);
-            msg.CC.Add(correo);
+            msg.To.Add("bquiros@csi-cr.com");
+            msg.CC.Add(pOb.Cc);
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
 
-            msg.Bcc.Add(correo);
+            msg.Bcc.Add(pOb.Remitente);
             msg.Subject = pOb.Asunto;
             //Se crea string que contiene el cuerpo del correo
             StringBuilder contenido = new StringBuilder();
             //contenido.AppendLine("Fecha: " + pOb.FechaIngreso);
+            contenido.AppendLine("Remitente: " + pOb.Remitente + "<br>");
+            contenido.AppendLine("<br>");
             contenido.AppendLine(pOb.Mensaje + "<br>");
-            contenido.AppendLine(pOb.RutaAdjunto + "<br>");
+            contenido.AppendLine("<br>");
+            contenido.AppendLine("Ruta archivo: " + pOb.RutaAdjunto + "<br>");
+            contenido.AppendLine("<br>");
             contenido.AppendLine("Gestor: " + pOb.Gestor);  
 
             //Se envia el string creado como cuerpo del correo
