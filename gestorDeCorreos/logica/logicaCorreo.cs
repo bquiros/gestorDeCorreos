@@ -41,17 +41,39 @@ namespace logica
             string correo = ConfigurationManager.AppSettings["mail"];
             string contrasenna = ConfigurationManager.AppSettings["mailPass"];
 
+            // Se crea mail
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
+            // Se define ruta de origen
             msg.From = new System.Net.Mail.MailAddress(correo);
-            msg.To.Add("bquiros@csi-cr.com");
-            msg.CC.Add(pOb.Cc);
+            // Se agrega el asunto
+            msg.Subject = pOb.Asunto;
+            // Tipo de codificación
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
 
+            string correosDestino = "bquiros@csi-cr.com;braujalioxd@gmail.com";
+            string[] listaCorreosDestino = correosDestino.Split(';');
+            // Se recorren los destinatarios para agregarlos 
+            foreach (string destinatario in listaCorreosDestino)
+            {
+                // se agregan destinatarios
+                msg.To.Add(destinatario);
+            }
+
+            string correosCC = pOb.Cc;
+            if (correosCC!="")
+            {
+                string[] listaCorreosCC = correosCC.Split(';');
+                // Se recorren los cc para agregarlos 
+                foreach (string destinos in listaCorreosCC)
+                {
+                    // Se agrega destinatarios
+                    msg.CC.Add(destinos);
+                }
+            }
+           
             msg.Bcc.Add(pOb.Remitente);
-            msg.Subject = pOb.Asunto;
             //Se crea string que contiene el cuerpo del correo
             StringBuilder contenido = new StringBuilder();
-            //contenido.AppendLine("Fecha: " + pOb.FechaIngreso);
             contenido.AppendLine("Remitente: " + pOb.Remitente + "<br>");
             contenido.AppendLine("<br>");
             contenido.AppendLine(pOb.Mensaje + "<br>");
@@ -59,25 +81,26 @@ namespace logica
             contenido.AppendLine("Ruta archivo: " + pOb.RutaAdjunto + "<br>");
             contenido.AppendLine("<br>");
             contenido.AppendLine("Gestor: " + pOb.Gestor);  
-
             //Se envia el string creado como cuerpo del correo
             msg.Body = contenido.ToString();
+            // Tipo de codificación del mensaje
             msg.BodyEncoding = System.Text.Encoding.UTF8;
+            // Se especifica que va a ser interpretado como HTML
             msg.IsBodyHtml = true;
-            msg.From = new System.Net.Mail.MailAddress(correo);
-
+            //Creo objeto cliente (Por donde se va a enviar el correo)
             System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
-            cliente.Credentials = new System.Net.NetworkCredential(correo, contrasenna); //credenciales de la cuenta que enviara los correos
-
+            //credenciales de la cuenta que enviara los correos
+            cliente.Credentials = new System.Net.NetworkCredential(correo, contrasenna);
+            // Se especifica el puerto
             cliente.Port = 587;
+            // sertificado de seguridad
             cliente.EnableSsl = true;
-
+            // Se identifica el cliente
             cliente.Host = "smtp.office365.com";
 
             try
             {
                 cliente.Send(msg);
-
                 //Referencio clase consulta
                 gestion gn = new gestion();
                 return gn.setEstadoFecha(pOb.Anno, pOb.Consecutivo);
