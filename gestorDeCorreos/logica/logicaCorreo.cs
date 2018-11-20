@@ -5,6 +5,7 @@ using System.Data;
 using dataCorreos; 
 using System.Configuration;
 using System.Net.Mail;
+using System.Net.Mime;
 
 namespace logica
 {
@@ -41,6 +42,17 @@ namespace logica
             string correo = ConfigurationManager.AppSettings["mail"];
             string contrasenna = ConfigurationManager.AppSettings["mailPass"];
 
+            //Ruta de archivo adjunto (Si lo lleva)
+            string PathFile = pOb.RutaAdjunto;
+            //Agrego el archivo que puse en la ruta anterior "PathFile", y su tipo.
+            Attachment Data = new Attachment(PathFile, MediaTypeNames.Application.Zip);
+
+            //Obtengo las propiedades del archivo.
+            ContentDisposition disposition = Data.ContentDisposition;
+            disposition.CreationDate = System.IO.File.GetCreationTime(PathFile);
+            disposition.ModificationDate = System.IO.File.GetLastWriteTime(PathFile);
+            disposition.ReadDate = System.IO.File.GetLastAccessTime(PathFile);
+            
             // Se crea mail
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
             // Se define ruta de origen
@@ -49,6 +61,8 @@ namespace logica
             msg.Subject = pOb.Asunto;
             // Tipo de codificación
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
+            //Agrego el archivo al mensaje
+            msg.Attachments.Add(Data);
 
             string correosDestino = pOb.Destinatario;
             string[] listaCorreosDestino = correosDestino.Split(';');
