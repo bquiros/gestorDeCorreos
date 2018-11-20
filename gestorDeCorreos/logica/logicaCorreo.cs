@@ -50,7 +50,7 @@ namespace logica
             // Tipo de codificación
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
 
-            string correosDestino = "bquiros@csi-cr.com;braujalioxd@gmail.com";
+            string correosDestino = pOb.Destinatario;
             string[] listaCorreosDestino = correosDestino.Split(';');
             // Se recorren los destinatarios para agregarlos 
             foreach (string destinatario in listaCorreosDestino)
