@@ -113,10 +113,12 @@ namespace logica
             cliente.Host = "smtp.office365.com";
 
             try
-            {
+            {   
+                //se envia el correo
                 cliente.Send(msg);
                 //Referencio clase consulta
                 gestion gn = new gestion();
+                //Clase que cambia estado de la tabla
                 return gn.setEstadoFecha(pOb.Anno, pOb.Consecutivo);
             }
             catch (Exception)
