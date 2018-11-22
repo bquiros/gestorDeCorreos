@@ -53,7 +53,7 @@ namespace logica
 
             //Ruta de archivo adjunto (Si lo lleva)
             string PathFile = pOb.RutaAdjunto;
-            if (PathFile.Contains(" ") == false)
+            if (PathFile.Contains(" ") == false && "".Equals(PathFile) == false)
             {
                 //Agrego el archivo que puse en la ruta anterior "PathFile", y su tipo.
                 Attachment Data = new Attachment(PathFile, MediaTypeNames.Application.Zip);
